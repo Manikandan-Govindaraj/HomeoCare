@@ -1,0 +1,95 @@
+﻿@model Order
+
+@section Styles{
+    <link href="~/css/Cart.css" rel="stylesheet" />
+}
+
+
+@if (Model.orderList.Count() > 0)
+{
+    <div class="container py-md-4">
+
+        <div class="shopping-cart">
+
+            <div class="column-labels">
+                <label class="product-image">Image</label>
+                <label class="product-details">Product</label>
+                <label class="product-price">Price</label>
+                <label class="product-quantity">Quantity</label>
+                <label class="product-removal">Remove</label>
+                <label class="product-line-price">Total</label>
+            </div>
+            @foreach (OrderList orderprod in Model.orderList)
+            {
+                <div class="product">
+                    <div class="product-image">
+                        <img src="../images/product/@orderprod.Product.ImagePath">
+                    </div>
+                    <div class="product-details">
+                        <div class="product-title">@orderprod.Product.ProductName</div>
+                        <p class="product-description">@orderprod.Product.ShortDesc</p>
+                    </div>
+                    <div class="product-price">@((orderprod.Price).ToString("0.00"))</div>
+                    <div class="product-quantity">
+                        <span>@orderprod.Quantity</span>
+                    </div>
+                    <div class="product-removal">
+                        <button type="button" class="remove-product" data-productid="@orderprod.ProductID">
+                            Return
+                        </button>
+                    </div>
+                    <div id="TotalPrice_@orderprod.ProductID" class="product-line-price">@((orderprod.Price * orderprod.Quantity).ToString("0.00"))</div>
+                </div>}
+
+
+
+
+            <div class="totals">
+                <div class="totals-item">
+                    <label>Subtotal</label>
+                    <div class="totals-value" id="cart-subtotal">@((Model.OrderTotal).ToString("0.00"))</div>
+                </div>
+                <div class="totals-item">
+                    <label>Tax (@WC.TaxRate %)</label>
+                    <div class="totals-value" id="cart-tax">@((Model.OrderTotal * WC.TaxRate / 100).ToString("0.00"))</div>
+                </div>
+                <div class="totals-item">
+                    <label>Shipping</label>
+                    <div class="totals-value" id="cart-shipping">@((WC.ShippingCharges).ToString("0.00"))</div>
+                </div>
+                <div class="totals-item totals-item-total">
+                    <label>Grand Total</label>
+                    <div class="totals-value" id="cart-total">
+                        @((Model.OrderTotal + WC.ShippingCharges + (Model.OrderTotal * WC.TaxRate / 100)).ToString("0.00"))
+                    </div>
+                </div>
+            </div>
+            @*<div class="row">
+
+                <div class="offset-md-8 col col-sm-2 col-md-2">
+                    <a href="@Url.Action("Checkout")" class="showloader checkout btn btn-success form-control">Continue</a>
+                </div>
+                <div class="col col-sm-2 col-md-2">
+                    <a href="@Url.Action("Products","Home")" class="btnProducts btn btn-success form-control">Shop Now</a>
+                </div>
+            </div>*@
+
+        </div>
+    </div>
+}
+
+
+
+@section Scripts{
+    <script src="~/js/Cart.js?v=3"></script>
+    <script type="text/javascript">
+        $(".licart").addClass('active');
+        $(".floatingButtonWrap").hide();
+        var taxRate = @WC.TaxRate;
+        var shippingRate = @WC.ShippingCharges;
+        var fadeTime = 300;
+        var UpdateCartURI = "@Url.Action("UpdateCart", "Cart")";
+        var RemoveCartItemURI = "@Url.Action("Remove", "Cart")";
+    </script>
+
+}

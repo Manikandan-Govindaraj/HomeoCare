@@ -1,0 +1,98 @@
+﻿@model IEnumerable<Order>
+
+@section Styles{
+    <link rel="stylesheet" href="https://kendo.cdn.telerik.com/2018.2.516/styles/kendo.default-v2.min.css" />
+    <style type="text/css">
+        .product-photo {
+            display: inline-block;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-size: 32px 35px;
+            background-position: center center;
+            vertical-align: middle;
+            line-height: 32px;
+            box-shadow: inset 0 0 1px #999, inset 0 0 10px rgba(0,0,0,.2);
+            margin-right: 5px;
+        }
+
+        .product-name {
+            display: inline-block;
+            vertical-align: middle;
+            line-height: 53px;
+            padding-left: 3px;
+        }
+
+        body {
+            background: #eee
+        }
+    </style>
+}
+<div class="container py-md-4" style="overflow:auto;font-family: 'Manrope', sans-serif; word-wrap: break-word;">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <!-- List group-->
+            <ul class="list-group shadow">
+                <!-- list group item-->
+                @foreach (Order order in Model)
+                {
+                    <li class="list-group-item">
+                        <!-- Custom content-->
+                        <div class="media align-items-lg-center flex-column flex-lg-row p-3">
+                            <div class="media-body order-2 order-lg-2">
+                                <a href="@Url.Action("OrderDetails","Account", new { id = order.OrderID})" class="mt-0 font-weight-bold mb-2">
+                                    #@order.UFID of @order.orderList.Count() items
+                                    @if (order.DeliveredDate != null)
+                                    {
+                                        @: deliverd on
+                                        <span style="white-space:nowrap;">
+                                            @(Convert.ToDateTime(order.DeliveredDate).ToString("dd/MM/yyyy") + ".")
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        @:will be deliverd soon.
+                                    }
+                                </a>
+                                <p class="font-italic text-muted mb-0 small">
+                                    @for (int i = 0; i < order.orderList.Count(); i++)
+                                    {
+                                        <span style="white-space:nowrap;">
+                                            @if (i == order.orderList.Count() - 1)
+                                            {
+                                                @(order.orderList[i].Product.ProductName + " " + order.orderList[i].Price.FormatCurrency() + ".")
+                                            }
+                                            else
+                                            {
+                                                @(order.orderList[i].Product.ProductName + " " + order.orderList[i].Price.FormatCurrency() + ",")
+                                            }
+                                       </span>
+                                    }
+                                </p>
+                                <div class="d-flex align-items-center justify-content-between mt-1">
+                                    <h6 class="font-weight-bold my-2">@((order.OrderTotal + order.ShippingFee + (order.OrderTotal * WC.TaxRate / 100)).FormatCurrency())</h6>
+
+                                </div>
+                            </div>
+                        </div> <!-- End -->
+                    </li>
+                }
+
+                <!-- End -->
+            </ul> <!-- End -->
+        </div>
+    </div>
+
+    <div id="gridorders" style="width:1250px;"></div>
+</div>
+
+@section Scripts{
+    <script src="https://kendo.cdn.telerik.com/2018.2.516/js/kendo.all.min.js"></script>
+    <script src="https://kendo.cdn.telerik.com/2018.2.620/js/cultures/kendo.culture.en-IN.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(".liAccount").addClass('active');
+        });
+    </script>
+
+}

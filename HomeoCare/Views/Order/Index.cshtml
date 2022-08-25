@@ -1,0 +1,286 @@
+﻿
+@section Styles{
+    <link rel="stylesheet" href="https://kendo.cdn.telerik.com/2018.2.516/styles/kendo.default-v2.min.css" />
+    <style type="text/css">
+        .product-photo {
+            display: inline-block;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-size: 32px 35px;
+            background-position: center center;
+            vertical-align: middle;
+            line-height: 32px;
+            box-shadow: inset 0 0 1px #999, inset 0 0 10px rgba(0,0,0,.2);
+            margin-right: 5px;
+        }
+
+        .product-name {
+            display: inline-block;
+            vertical-align: middle;
+            line-height: 53px;
+            padding-left: 3px;
+        }
+    </style>
+}
+
+   <span id="popupNotification"></span>
+    <div id="gridorders" style="width:100%;"></div>
+    <div id="details"></div>
+
+@section Scripts{
+    <script src="https://kendo.cdn.telerik.com/2018.2.516/js/kendo.all.min.js"></script>
+    <script src="https://kendo.cdn.telerik.com/2018.2.620/js/cultures/kendo.culture.en-IN.min.js"></script>
+    <script type="text/javascript">
+        var wnd, detailsTemplate, centered=null;
+
+
+        $(document).ready(function () {
+            kendo.culture("en-IN");
+            var dataSource = new kendo.data.DataSource({
+                transport: {
+                    read: {
+                        type: "POST",
+                        dataType: "json",
+                        url: "@Url.Action("Getcutomerorders")",
+                        data: {}
+                    },
+                    update: {
+                        url: "@Url.Action("UpdateGrid")",
+                        type: "PUT",
+                        dataType: "json",
+                        data: {}
+                    },
+                    destroy: {
+                        type: "POST",
+                        dataType: "json",
+                        url: "@Url.Action("delete")",
+                        data: {}
+                    }
+                },
+                schema: {
+                    data: "data", // records are returned in the "data" field of the response
+                    total: "total", // total number of records is in the "total" field of the response
+                    model: {
+                        id: "ufid",
+                        fields: {
+                            "orderDate": { type: "date", editable: false },
+                            "deliveredDate": { type: "date", editable: false },
+                            "drpdown": { defaultValue: { key: "0", value: "Pending" } },
+                            "orderTotal": { editable: false },
+                            "shippingFee": { editable: false },
+                            "ufid": { editable: false },
+                        },
+                        CalculateTaxAmount: function () {
+                            return this.get('orderTotal') * 18 / 100;
+                        }
+                    }
+                },
+                serverPaging: false,
+                serverFiltering: false,
+                serverSorting: false,
+                pageSize: 20,
+            });
+
+
+            $("#gridorders").kendoGrid({
+                dataSource: dataSource,
+                height: 550,
+                detailInit: detailInit,
+                dataBound: function () {
+                    this.expandRow(this.tbody.find("tr.k-master-row").first());
+                    //this.expandRow(this.tbody.find("tr.k-master-row"));
+                },
+                columns: [
+                    { field: "ufid", title: "Order ID", width: "100px" },
+                    {
+                        field: "orderDate", title: "Order Date", width: "100px",
+                        type: "date",
+                        format: "{0:MM-dd-yyyy}"
+                    },
+                    {
+                        field: "deliveredDate", title: "Delivered Date", width: "100px",
+                        type: "date",
+                        format: "{0:MM-dd-yyyy}"
+                    },
+                    { field: "orderTotal", title: "Order Total", width: "80px", format: "{0:c}" },
+                    { field: "shippingFee", title: "Shipping Fee", width: "80px", format: "{0:c}" },
+                    {
+                        title: "Tax Amount",
+                        field: 'CalculateTaxAmount()',
+                        aggregates: 'sum',
+                        format: "{0:c}",
+                        width: "80px"
+                    },
+                    { field: "drpdown", title: "Status", width: "150px", editor: OrderStatusEditor, template: "#=drpdown.value#" },
+                    { command: ["edit", { text: "Customer Details", click: showCustomerDetails }], title: "&nbsp;", width: "250px" },
+                ],
+                editable: "inline",
+                pageable: {
+                    numeric: false,
+                    refresh: false,
+                    //pageSizes: [10, 25, 50],
+                    pageSizes: false,
+                    previousNext: true,
+                    input: true,
+                    info: false
+                },
+                resizable: true,
+                filterable: true,
+                selectable: true,
+                scrollable: true,
+                columnMenu: true,
+                sortable: {
+                    mode: "multiple",
+                    allowUnsort: true
+                },
+                beforeEdit: function (e) {
+                    if (centered != null) {
+                        centered.hide();
+                    }
+                    var columnIndex = this.cellIndex(e.container);
+                    var fieldName = this.thead.find("th").eq(columnIndex).data("field");
+
+                    if (e.model.status == "Returned") {
+                        centered = $("#popupNotification").kendoNotification({
+                            stacking: "down",
+                            show: onShow,
+                            button: true
+                        }).data("kendoNotification");
+
+                        var d = new Date();
+                        centered.show("Returned order cannot be edited.", "error");
+                        e.preventDefault();
+                    }
+                }
+            }).data("kendoGrid");
+
+
+            wnd = $("#details")
+                .kendoWindow({
+                    title: "Customer Details",
+                    modal: true,
+                    visible: false,
+                    resizable: false,
+                    width: 300
+                }).data("kendoWindow");
+
+            detailsTemplate = kendo.template($("#template").html());
+        });
+
+
+        function detailInit(e) {
+            $("<div/>").appendTo(e.detailCell).kendoGrid({
+                dataSource: {
+                    transport: {
+                        read: {
+                            type: "POST",
+                            dataType: "json",
+                            url: "@Url.Action("Getorderlist")",
+                            data: {}
+                        }
+                    },
+                    schema: {
+                        data: "data", // records are returned in the "data" field of the response
+                        total: "total", // total number of records is in the "total" field of the response
+                        model: {
+                            id: "OrderID",
+                            fields: {
+                                OrderDate: { type: "date" }
+                            },
+                            sumOfAllWeeks: function () {
+                                return this.get('quantity') * this.get('price');
+                            }
+                        }
+                    },
+                    serverPaging: false,
+                    serverSorting: false,
+                    serverFiltering: true,
+                    pageSize: 10,
+                    filter: { field: "orderID", operator: "eq", value: e.data.orderID }
+                },
+                scrollable: false,
+                sortable: false,
+                pageable: false,
+                columns: [
+                    {
+                        field: "ProductName",
+                        title: "Product Name",
+                        template: "<div class='product-photo' style='background-image: url(../images/product/#:product.imagePath#);'></div><div class='product-name'>#: product.productName #</div>",
+                        width: "160px"
+                    },
+                    { field: "productID", title: "Product ID", width: "110px" },
+                    { field: "quantity", title: "Quantity", width: "110px" },
+                    { field: "price", title: "Price", format: "{0:c}", width: "110px" },
+                    {
+                        title: "Sum",
+                        field: 'sumOfAllWeeks()',
+                        aggregates: 'sum',
+                        format: "{0:c}",
+                        width: "110px"
+                    }
+                ]
+            });
+        }
+
+        function OrderStatusEditor(container, options) {
+            $('<input required name="' + options.field + '"/>').appendTo(container).kendoDropDownList({
+                autoBind: false,
+                dataTextField: "value",
+                dataValueField: "key",
+                dataSource: {
+                    transport: {
+                        read: {
+                            type: "POST",
+                            dataType: "json",
+                            url: "@Url.Action("GetOrderStatusList")",
+                            data: {}
+                        }
+                    },
+                    schema: {
+                        data: "data"
+                    }
+
+                }
+            });
+        }
+
+        function showCustomerDetails(e) {
+            e.preventDefault();
+            if (centered != null) {
+                centered.hide();
+            }
+            var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+            wnd.content(detailsTemplate(dataItem));
+            wnd.center().open();
+        }
+
+
+        function onShow(e) {
+            if (e.sender.getNotifications().length == 1) {
+                var element = e.element.parent(),
+                    eWidth = element.width(),
+                    eHeight = element.height(),
+                    wWidth = $(window).width(),
+                    wHeight = $(window).height(),
+                    newTop, newLeft;
+
+                newLeft = Math.floor(wWidth / 2 - eWidth / 2);
+                newTop = Math.floor(wHeight / 2 - eHeight / 2);
+
+                e.element.parent().css({ top: newTop, left: newLeft });
+            }
+        }
+    </script>
+    <script type="text/x-kendo-template" id="template">
+        <div id="details-container">
+            <h3>#= userDetails.firstName # #= userDetails.lastName #</h3>
+            <em>Order ID:#= ufid #</em>
+            <dl>
+                <dt>Phone: #= userDetails.phoneNumber #</dt>
+                <dt>Email: #= userDetails.email #</dt>
+            </dl>
+        </div>
+    </script>
+
+}

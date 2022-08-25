@@ -1,0 +1,67 @@
+﻿@model PersonalDetails
+
+
+<form method="post">
+    <div class="container py-md-4">
+        <div class="row">
+            @Html.HiddenFor(model => Model.UserID)
+            <div class="col-md-6 offset-md-3">
+                <div class="card-header bg-dark text-light ml-0 row container">Personal Details</div>
+                <br />
+                <div class="form-group">
+                    <label>Username</label>
+                    <input value="@ViewBag.Username" class="form-control" disabled />
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="@Model.FirstName"></label>
+                            <input asp-for="@Model.FirstName" class="form-control" />
+                            <span asp-validation-for="@Model.FirstName" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="@Model.LastName"></label>
+                            <input asp-for="@Model.LastName" class="form-control" />
+                            <span asp-validation-for="@Model.LastName" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="@Model.PhoneNumber"></label>
+                            <input asp-for="@Model.PhoneNumber" class="form-control" />
+                            <span asp-validation-for="@Model.PhoneNumber" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="@Model.Email"></label>
+                            <input asp-for="@Model.Email" class="form-control" />
+                            <span asp-validation-for="@Model.Email" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <button id="update-profile-button" type="submit" class="btn btn-primary">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts{
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+    <script>
+        $(document).ready(function () {
+            $(".liAccount").addClass('active');
+        });
+    </script>
+}

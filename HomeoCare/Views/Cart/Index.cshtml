@@ -1,0 +1,112 @@
+﻿@model IEnumerable<Product>
+
+@section Styles{
+    <link href="~/css/Cart.css" rel="stylesheet" />
+}
+
+@if (Model.Count() > 0)
+{
+<div class="container py-md-4">
+
+    <div class="shopping-cart">
+
+        <div class="column-labels">
+            <label class="product-image">Image</label>
+            <label class="product-details">Product</label>
+            <label class="product-price">Price</label>
+            <label class="product-quantity">Quantity</label>
+            <label class="product-removal">Remove</label>
+            <label class="product-line-price">Total</label>
+        </div>
+        @foreach (Product product in Model)
+        {
+            <div class="product">
+                <div class="product-image">
+                    <img src="../images/product/@product.ImagePath">
+                </div>
+                <div class="product-details">
+                    <div class="product-title">@product.ProductName</div>
+                    <p class="product-description">@product.ShortDesc</p>
+                </div>
+                <div class="product-price">@((product.SellingPrice).ToString("0.00"))</div>
+                <div class="product-quantity">
+                    <input type="number" value="@product.TempQty" min="1" max="@product.Quantity" onchange="Calc(this)"
+                      title="you can give score -10 to +10 only"     data-productid="@product.ProductID">
+                </div>
+                <div class="product-removal">
+                    <button type="button" class="remove-product" data-productid="@product.ProductID">
+                        Remove
+                    </button>
+                </div>
+                <div id="TotalPrice_@product.ProductID" class="product-line-price">@((product.SellingPrice * product.TempQty).ToString("0.00"))</div>
+            </div>}
+
+
+
+
+        <div class="totals">
+            <div class="totals-item">
+                <label>Subtotal</label>
+                <div class="totals-value" id="cart-subtotal">@((ViewBag.SubTotal).ToString("0.00"))</div>
+            </div>
+            <div class="totals-item">
+                <label>Tax (@WC.TaxRate %)</label>
+                <div class="totals-value" id="cart-tax">@((ViewBag.SubTotal * WC.TaxRate / 100).ToString("0.00"))</div>
+            </div>
+            <div class="totals-item">
+                <label>Shipping</label>
+                <div class="totals-value" id="cart-shipping">@((WC.ShippingCharges).ToString("0.00"))</div>
+            </div>
+            <div class="totals-item totals-item-total">
+                <label>Grand Total</label>
+                <div class="totals-value" id="cart-total">
+                    @((ViewBag.SubTotal + WC.ShippingCharges + (ViewBag.SubTotal * WC.TaxRate / 100)).ToString("0.00"))
+                </div>
+            </div>
+        </div>
+        <div class="row">
+           
+            <div class="offset-md-8 col col-sm-2 col-md-2">
+                <a href="@Url.Action("Checkout")" class="showloader checkout btn btn-success form-control">Continue</a>
+            </div>
+            <div class="col col-sm-2 col-md-2">
+                <a href="@Url.Action("Products","Home")" class="btnProducts btn btn-success form-control">Shop Now</a>
+            </div>
+        </div>
+       
+    </div>
+</div>
+}
+else
+{
+<div class="container-fluid mt-100">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body cart">
+                    <div class="col-sm-12 empty-cart-cls text-center">
+                        <img src="https://i.imgur.com/dCdflKN.png" width="130" height="130" class="img-fluid mb-4 mr-3">
+                        <h3><strong>Your Cart is Empty</strong></h3>
+                        <h4>Add something to make us happy :)</h4> <a asp-action="Products" asp-controller="Home" class="btn btn-primary cart-btn-transform m-3" data-abc="true">continue shopping</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+}
+
+
+@section Scripts{
+    <script src="~/js/Cart.js?v=3"></script>
+    <script type="text/javascript">
+        $(".licart").addClass('active');
+        $(".floatingButtonWrap").hide();
+        var taxRate = @WC.TaxRate;
+        var shippingRate = @WC.ShippingCharges;
+        var fadeTime = 300;
+        var UpdateCartURI = "@Url.Action("UpdateCart", "Cart")";
+        var RemoveCartItemURI = "@Url.Action("Remove", "Cart")";
+    </script>
+
+}

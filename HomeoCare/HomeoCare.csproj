@@ -1,0 +1,201 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UserSecretsId>13820a6a-76af-4424-abce-33f597830cae</UserSecretsId>
+	<UseAppHost>false</UseAppHost>
+	<AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
+	<EnvironmentName>Development</EnvironmentName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="wwwroot\fontawesome\svgs\**" />
+    <Content Remove="wwwroot\fontawesome\svgs\**" />
+    <EmbeddedResource Remove="wwwroot\fontawesome\svgs\**" />
+    <None Remove="wwwroot\fontawesome\svgs\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Migrations\20210627045713_seedprod1.cs" />
+    <Compile Remove="Migrations\20210627045713_seedprod1.Designer.cs" />
+    <Compile Remove="Migrations\20210627045803_seedprod1.cs" />
+    <Compile Remove="Migrations\20210627045803_seedprod1.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="wwwroot\images\product\299a9bc0-208b-45bc-8211-ca2a9eb0a963.jpg" />
+    <Content Remove="wwwroot\images\product\4f6dc610-3900-483e-b17b-d5d48838db50.jpg" />
+    <Content Remove="wwwroot\images\product\68c2445a-d59b-44c5-a5c7-534e7d903083.jpg" />
+    <Content Remove="wwwroot\images\product\89494a12-0817-4c8c-a6f0-8a1306506fc2.jpg" />
+    <Content Remove="wwwroot\images\product\8dbd28f5-e638-462b-93c9-3015eff5417b.jpg" />
+    <Content Remove="wwwroot\images\product\a31f6e45-1ec4-4946-93a6-01d23d69b4e7.jfif" />
+    <Content Remove="wwwroot\images\product\ab68c286-f440-42b2-93bc-30e2eb4960fc.jpg" />
+    <Content Remove="wwwroot\images\product\ce06f4d7-524a-4b2b-8b1e-36fba13fff9d.jfif" />
+    <Content Remove="wwwroot\images\product\d8a7de1d-6f0f-4afb-ae96-41d351f1928e.jpg" />
+    <Content Remove="wwwroot\images\product\eab2c5a4-030e-47b4-be22-de29c9c7d656.jpg" />
+    <Content Remove="wwwroot\images\product\f41b1fbd-2396-4af6-acf7-45c1d0416249.jfif" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.15" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.1.15" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.15" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.15">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.jQuery.Unobtrusive.Ajax" Version="3.2.6" />
+    <PackageReference Include="RazorPay.Core" Version="1.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\css\site.css" />
+    <None Include="wwwroot\favicon.ico" />
+    <None Include="wwwroot\fontawesome\js\all.js" />
+    <None Include="wwwroot\fontawesome\js\all.min.js" />
+    <None Include="wwwroot\fontawesome\js\brands.js" />
+    <None Include="wwwroot\fontawesome\js\brands.min.js" />
+    <None Include="wwwroot\fontawesome\js\conflict-detection.js" />
+    <None Include="wwwroot\fontawesome\js\conflict-detection.min.js" />
+    <None Include="wwwroot\fontawesome\js\fontawesome.js" />
+    <None Include="wwwroot\fontawesome\js\fontawesome.min.js" />
+    <None Include="wwwroot\fontawesome\js\regular.js" />
+    <None Include="wwwroot\fontawesome\js\regular.min.js" />
+    <None Include="wwwroot\fontawesome\js\solid.js" />
+    <None Include="wwwroot\fontawesome\js\solid.min.js" />
+    <None Include="wwwroot\fontawesome\js\v4-shims.js" />
+    <None Include="wwwroot\fontawesome\js\v4-shims.min.js" />
+    <None Include="wwwroot\fontawesome\less\brands.less" />
+    <None Include="wwwroot\fontawesome\less\fontawesome.less" />
+    <None Include="wwwroot\fontawesome\less\regular.less" />
+    <None Include="wwwroot\fontawesome\less\solid.less" />
+    <None Include="wwwroot\fontawesome\less\v4-shims.less" />
+    <None Include="wwwroot\fontawesome\less\_animated.less" />
+    <None Include="wwwroot\fontawesome\less\_bordered-pulled.less" />
+    <None Include="wwwroot\fontawesome\less\_core.less" />
+    <None Include="wwwroot\fontawesome\less\_fixed-width.less" />
+    <None Include="wwwroot\fontawesome\less\_icons.less" />
+    <None Include="wwwroot\fontawesome\less\_larger.less" />
+    <None Include="wwwroot\fontawesome\less\_list.less" />
+    <None Include="wwwroot\fontawesome\less\_mixins.less" />
+    <None Include="wwwroot\fontawesome\less\_rotated-flipped.less" />
+    <None Include="wwwroot\fontawesome\less\_screen-reader.less" />
+    <None Include="wwwroot\fontawesome\less\_shims.less" />
+    <None Include="wwwroot\fontawesome\less\_stacked.less" />
+    <None Include="wwwroot\fontawesome\less\_variables.less" />
+    <None Include="wwwroot\fontawesome\metadata\categories.yml" />
+    <None Include="wwwroot\fontawesome\metadata\icons.yml" />
+    <None Include="wwwroot\fontawesome\metadata\shims.yml" />
+    <None Include="wwwroot\fontawesome\metadata\sponsors.yml" />
+    <None Include="wwwroot\fontawesome\scss\brands.scss" />
+    <None Include="wwwroot\fontawesome\scss\fontawesome.scss" />
+    <None Include="wwwroot\fontawesome\scss\regular.scss" />
+    <None Include="wwwroot\fontawesome\scss\solid.scss" />
+    <None Include="wwwroot\fontawesome\scss\v4-shims.scss" />
+    <None Include="wwwroot\fontawesome\scss\_animated.scss" />
+    <None Include="wwwroot\fontawesome\scss\_bordered-pulled.scss" />
+    <None Include="wwwroot\fontawesome\scss\_core.scss" />
+    <None Include="wwwroot\fontawesome\scss\_fixed-width.scss" />
+    <None Include="wwwroot\fontawesome\scss\_icons.scss" />
+    <None Include="wwwroot\fontawesome\scss\_larger.scss" />
+    <None Include="wwwroot\fontawesome\scss\_list.scss" />
+    <None Include="wwwroot\fontawesome\scss\_mixins.scss" />
+    <None Include="wwwroot\fontawesome\scss\_rotated-flipped.scss" />
+    <None Include="wwwroot\fontawesome\scss\_screen-reader.scss" />
+    <None Include="wwwroot\fontawesome\scss\_shims.scss" />
+    <None Include="wwwroot\fontawesome\scss\_stacked.scss" />
+    <None Include="wwwroot\fontawesome\scss\_variables.scss" />
+    <None Include="wwwroot\fontawesome\sprites\brands.svg" />
+    <None Include="wwwroot\fontawesome\sprites\regular.svg" />
+    <None Include="wwwroot\fontawesome\sprites\solid.svg" />
+    <None Include="wwwroot\fontawesome\webfonts\fa-brands-400.svg" />
+    <None Include="wwwroot\fontawesome\webfonts\fa-brands-400.woff2" />
+    <None Include="wwwroot\fontawesome\webfonts\fa-regular-400.svg" />
+    <None Include="wwwroot\fontawesome\webfonts\fa-regular-400.woff2" />
+    <None Include="wwwroot\fontawesome\webfonts\fa-solid-900.svg" />
+    <None Include="wwwroot\fontawesome\webfonts\fa-solid-900.woff2" />
+    <None Include="wwwroot\images\patio.jpg" />
+    <None Include="wwwroot\js\site.js" />
+    <None Include="wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css" />
+    <None Include="wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css.map" />
+    <None Include="wwwroot\lib\bootstrap\dist\css\bootstrap-grid.min.css" />
+    <None Include="wwwroot\lib\bootstrap\dist\css\bootstrap-grid.min.css.map" />
+    <None Include="wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.css" />
+    <None Include="wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.css.map" />
+    <None Include="wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.min.css" />
+    <None Include="wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.min.css.map" />
+    <None Include="wwwroot\lib\bootstrap\dist\css\bootstrap.css" />
+    <None Include="wwwroot\lib\bootstrap\dist\css\bootstrap.css.map" />
+    <None Include="wwwroot\lib\bootstrap\dist\css\bootstrap.min.css" />
+    <None Include="wwwroot\lib\bootstrap\dist\css\bootstrap.min.css.map" />
+    <None Include="wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.js" />
+    <None Include="wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.js.map" />
+    <None Include="wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.min.js" />
+    <None Include="wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.min.js.map" />
+    <None Include="wwwroot\lib\bootstrap\dist\js\bootstrap.js" />
+    <None Include="wwwroot\lib\bootstrap\dist\js\bootstrap.js.map" />
+    <None Include="wwwroot\lib\bootstrap\dist\js\bootstrap.min.js" />
+    <None Include="wwwroot\lib\bootstrap\dist\js\bootstrap.min.js.map" />
+    <None Include="wwwroot\lib\bootstrap\LICENSE" />
+    <None Include="wwwroot\lib\jquery-validation-unobtrusive\jquery.validate.unobtrusive.js" />
+    <None Include="wwwroot\lib\jquery-validation-unobtrusive\jquery.validate.unobtrusive.min.js" />
+    <None Include="wwwroot\lib\jquery-validation-unobtrusive\LICENSE.txt" />
+    <None Include="wwwroot\lib\jquery-validation\dist\additional-methods.js" />
+    <None Include="wwwroot\lib\jquery-validation\dist\additional-methods.min.js" />
+    <None Include="wwwroot\lib\jquery-validation\dist\jquery.validate.js" />
+    <None Include="wwwroot\lib\jquery-validation\dist\jquery.validate.min.js" />
+    <None Include="wwwroot\lib\jquery-validation\LICENSE.md" />
+    <None Include="wwwroot\lib\jquery\dist\jquery.js" />
+    <None Include="wwwroot\lib\jquery\dist\jquery.min.js" />
+    <None Include="wwwroot\lib\jquery\dist\jquery.min.map" />
+    <None Include="wwwroot\lib\jquery\LICENSE.txt" />
+    <None Include="wwwroot\templates\css\flex-slider.css" />
+    <None Include="wwwroot\templates\css\fontawesome.css" />
+    <None Include="wwwroot\templates\css\owl.css" />
+    <None Include="wwwroot\templates\css\templatemo-sixteen.css" />
+    <None Include="wwwroot\templates\fonts\Flaticon.woff" />
+    <None Include="wwwroot\templates\fonts\flexslider-icon.eot" />
+    <None Include="wwwroot\templates\fonts\flexslider-icon.svg" />
+    <None Include="wwwroot\templates\fonts\flexslider-icon.ttf" />
+    <None Include="wwwroot\templates\fonts\flexslider-icon.woff" />
+    <None Include="wwwroot\templates\fonts\fontawesome-webfont.eot" />
+    <None Include="wwwroot\templates\fonts\fontawesome-webfont.svg" />
+    <None Include="wwwroot\templates\fonts\fontawesome-webfont.ttf" />
+    <None Include="wwwroot\templates\fonts\fontawesome-webfont.woff" />
+    <None Include="wwwroot\templates\fonts\fontawesome-webfont.woff2" />
+    <None Include="wwwroot\templates\fonts\FontAwesome.otf" />
+    <None Include="wwwroot\templates\fonts\slick.eot" />
+    <None Include="wwwroot\templates\fonts\slick.svg" />
+    <None Include="wwwroot\templates\fonts\slick.ttf" />
+    <None Include="wwwroot\templates\fonts\slick.woff" />
+    <None Include="wwwroot\templates\images\about-heading.jpg" />
+    <None Include="wwwroot\templates\images\client-01.png" />
+    <None Include="wwwroot\templates\images\contact-heading.jpg" />
+    <None Include="wwwroot\templates\images\feature-image.jpg" />
+    <None Include="wwwroot\templates\images\more-info.jpg" />
+    <None Include="wwwroot\templates\images\products-heading.jpg" />
+    <None Include="wwwroot\templates\images\product_01.jpg" />
+    <None Include="wwwroot\templates\images\product_02.jpg" />
+    <None Include="wwwroot\templates\images\product_03.jpg" />
+    <None Include="wwwroot\templates\images\product_04.jpg" />
+    <None Include="wwwroot\templates\images\product_05.jpg" />
+    <None Include="wwwroot\templates\images\product_06.jpg" />
+    <None Include="wwwroot\templates\images\services-bg.jpg" />
+    <None Include="wwwroot\templates\images\slide_01.jpg" />
+    <None Include="wwwroot\templates\images\slide_02.jpg" />
+    <None Include="wwwroot\templates\images\slide_03.jpg" />
+    <None Include="wwwroot\templates\images\team_01.jpg" />
+    <None Include="wwwroot\templates\images\team_02.jpg" />
+    <None Include="wwwroot\templates\images\team_03.jpg" />
+    <None Include="wwwroot\templates\images\team_04.jpg" />
+    <None Include="wwwroot\templates\images\team_05.jpg" />
+    <None Include="wwwroot\templates\images\team_06.jpg" />
+    <None Include="wwwroot\templates\Inquiry.html" />
+    <None Include="wwwroot\templates\js\accordions.js" />
+    <None Include="wwwroot\templates\js\custom.js" />
+    <None Include="wwwroot\templates\js\isotope.js" />
+    <None Include="wwwroot\templates\js\owl.js" />
+    <None Include="wwwroot\templates\js\slick.js" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,167 @@
+﻿@model HomeoCare.Models.ViewModels.ProductVM
+
+@{ var title = "Create Product"; }
+
+<form method="post" enctype="multipart/form-data">
+    @if (Model.Product.ProductID != 0)
+    {
+        title = "Edit Product";
+<input asp-for="Product.ProductID" hidden />}
+    <div class="container py-md-4">
+
+        <div class="form-group row">
+            <h2 class="text-info pl-3">@title</h2>
+        </div>
+        <div class="row">
+            <div class="col-6">
+
+                <div class="form-group">
+                    <label asp-for="Product.ProductName"></label>
+                    <input asp-for="Product.ProductName" class="form-control" />
+                    <span asp-validation-for="Product.ProductName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Product.CategoryId"></label>
+                    <select asp-for="Product.CategoryId" asp-items="@Model.CategorySelectList" class="form-control">
+                        <option disabled selected>--Select Category--</option>
+                    </select>
+                    <span asp-validation-for="Product.CategoryId" class="text-danger"></span>
+                </div>
+
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="Product.Quantity"></label>
+                            <input asp-for="Product.Quantity" class="form-control" />
+                            <span asp-validation-for="Product.Quantity" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="Product.RetailPrice"></label>
+                            <input asp-for="Product.RetailPrice" class="form-control" />
+                            <span asp-validation-for="Product.RetailPrice" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="Product.OriginalPrice"></label>
+                            <input asp-for="Product.OriginalPrice" class="form-control" />
+                            <span asp-validation-for="Product.OriginalPrice" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="Product.SellingPrice"></label>
+                            <input asp-for="Product.SellingPrice" class="form-control" />
+                            <span asp-validation-for="Product.SellingPrice" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Product.ShortDesc"></label>
+                    <textarea asp-for="Product.ShortDesc" rows="3" class="form-control"></textarea>
+                    <span asp-validation-for="Product.ShortDesc" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Product.Description"></label>
+                    <textarea asp-for="Product.Description" rows="5" class="form-control summernote"></textarea>
+                    <span asp-validation-for="Product.Description" class="text-danger"></span>
+                </div>
+
+
+                <div class="form-group row">
+                    <div class="col-2">
+                        Image
+                    </div>
+                    <div class="col-10">
+                        <input type="file" name="files" id="uploadBox" multiple class="form-control" />
+                    </div>
+                </div>
+
+
+                <div class="form-group row">
+                    <div class="col-8 offset-4 row">
+                        <div class="col">
+                            @if (Model.Product.ProductID != 0)
+                            {
+                                <input type="submit" class="btn btn-info w-100" value="Update" /> 
+                            }
+                            else
+                            {
+                                <input type="submit" onclick="return validateInput()" class="btn btn-primary w-100" value="Create" />
+                            }
+                        </div>
+                        <div class="col">
+                            <a asp-action="Index" class="btn btn-success w-100"><i class="fas fa-sign-out-alt"></i> Back</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6">
+                @* Keep this empty *@
+                @if (Model.Product.ProductID != 0)
+                {
+                    <img class="imagePreview" src="@WC.ImagePath@Model.Product.ImagePath" width="100%" style="border-radius:5px; border:1px solid #bbb" />
+                }
+                else { 
+                    <img class="imagePreview" width="100%" style="border-radius:5px; border:1px solid #bbb" />
+                }
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts{
+
+    @{
+      <partial name="_ValidationScriptsPartial" />
+    }
+    <script>
+        $(document).ready(function () {
+            var _URL = window.URL || window.webkitURL;
+            $("#uploadBox").change(function (e) {
+                var input = this;
+                if ($(this).get(0).files.length != 0) {
+                    var fileExtension = ['png', 'jpg', 'jpeg'];
+                    if ($.inArray($(this).val().split('.').pop().toLowerCase(), fileExtension) == -1) {
+                        alert("Only formats are allowed : " + fileExtension.join(', '));
+                        return false;
+                    } else {
+                        var file, img;
+                        if ((file = this.files[0])) {
+                            img = new Image();
+                            var objectUrl = _URL.createObjectURL(file);
+                            img.onload = function () {
+                                if (this.width <= this.height) {
+                                    alert("Uploaded image has valid Height and Width.");
+                                    $("#uploadBox").val(null);
+                                } else {
+
+                                    var reader = new FileReader();
+                                    reader.onload = function (e) {
+                                        $('.imagePreview').attr('src', '' + e.target.result + '');
+                                        $('.imagePreview').hide();
+                                        $('.imagePreview').fadeIn(650);
+                                    }
+                                    reader.readAsDataURL(input.files[0]);
+                                }
+                                _URL.revokeObjectURL(objectUrl);
+                            };
+                            img.src = objectUrl;
+                        }
+                    }
+                }
+                else {
+                    alert('please upload any image.');
+                }
+            });
+        });
+
+    </script>
+}

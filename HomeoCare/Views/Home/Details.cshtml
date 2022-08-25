@@ -1,0 +1,98 @@
+﻿@model HomeoCare.Models.ViewModels.DetailsVM
+
+@section Styles{
+    <link href="//cdn.jsdelivr.net/npm/@@sweetalert2/theme-bootstrap-4/bootstrap-4.css" rel="stylesheet">
+    <style>
+        .img-thumbnail {
+            border: 1px solid #f33f3f;
+            width: 550px;
+            height: 360px;
+        }
+
+       
+        @@media screen and (max-width: 400px) {
+            .img-thumbnail {
+                height: 230px;
+            }
+        }
+    </style>
+}
+<form method="post">
+    <input asp-for="@Model.Product.ProductID" hidden />
+    <div class="container py-md-4 best-features" style="margin-top:0px;">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="right-image">
+                    <img class="img-thumbnail" src="@WC.ImagePath@Model.Product.ImagePath" alt="">
+                    <div class="bottom-right">
+                        <span class="spanpricing"><h4 class="text-warning text-center"> @((Model.Product.SellingPrice).ToString("c"))</h4></span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 p-3 p-md-0">
+                <div class="text-center">
+                    <h4>@Model.Product.ProductName</h4>
+                    <div style="height:284px;">
+                        <p> @Model.Product.ShortDesc</p>
+                        <p> @Model.Product.Description</p>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 col-6">
+                            @if (!Model.ExistsInCart)
+                            {
+                                <button type="button" data-productname="@Model.Product.ProductName" data-productid="@Model.Product.ProductID" asp-route-id="@Model.Product.ProductID" class="btn btn-info form-control btn-sm">
+                                    <i class="fas fa-shopping-cart"></i>&nbsp;Add to cart
+                                </button>
+                            }
+                            else
+                            {
+                                <a asp-controller="Cart" asp-action="Index" class="btn btn-info form-control btn-sm">
+                                    <i class="fas fa-shopping-cart"></i>&nbsp;Go to cart
+                                </a>
+                            }
+                        </div>
+                        <div class="col-md-6 col-6">
+                            <a asp-action="Products" asp-controller="Home" asp-route-id="@Model.Product.ProductID" class="btn btn-info form-control btn-sm">
+                                <i class="fas fa-sign-out-alt"></i>&nbsp;Back to list
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts{
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $(".liProducts").addClass('active');
+            $('[data-productid]').click(function () {
+                var button = $(this);
+                $.post("@Url.Action("Addtocart","Home")", { ProductID: button.data("productid") }, function (data) {
+                    $(".cartitemcount").html(data.cartitemcount);
+
+                    Swal.fire({
+                        title: 'hooray!',
+                        text: button.data("productname") + " has been added to your cart",
+                        icon: 'success',
+                        focusConfirm: false,
+                        showCancelButton: true,
+                        confirmButtonColor: '#0069d9',
+                        cancelButtonColor: '#28a745',
+                        confirmButtonText: 'View cart',
+                        cancelButtonText: 'Continue shopping'
+
+                    }).then((result) => {
+                        if (result.value) {
+                            window.location.href = '@Url.Action("Index","Cart")';
+                        } else {
+                            window.location.href = '@Url.Action("Products","Home")';
+                        }
+                    });
+                });
+            });
+         });
+    </script>
+}

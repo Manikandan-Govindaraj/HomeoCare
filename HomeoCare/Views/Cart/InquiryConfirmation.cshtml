@@ -1,0 +1,25 @@
+﻿<div class="container py-3">
+    <div class="text-center">
+
+        <h3 class="text-info">Order Confirmation</h3>
+
+        <p>Thank you for your order. We’ll send a confirmation when your order ships.</p>
+        <br />
+        <div class="row">
+            <div class="offset-md-4 col col-sm-2 col-md-2">
+                <a href="@Url.Action("Index","Home")" class="btn btn-success form-control">Go Home</a>
+            </div>
+            <div class="col col-sm-2 col-md-2">
+                <a href="@Url.Action("Orders","Account")" class="btn btn-success form-control">View orders</a>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@section Scripts{
+
+    <script type="text/javascript">
+        $(".licart").addClass('active');
+    </script>
+}

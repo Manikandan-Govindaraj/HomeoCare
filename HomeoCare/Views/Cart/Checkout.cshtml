@@ -1,0 +1,315 @@
+﻿@model HomeoCare.Models.ViewModels.ProductUserVM
+
+@section Styles{
+    <link href="//cdn.jsdelivr.net/npm/@@sweetalert2/theme-bootstrap-4/bootstrap-4.css" rel="stylesheet">
+    <link href="~/css/Cart.css" rel="stylesheet" />
+    <style>
+        .form-wizard-next-btn, .form-wizard .form-wizard-previous-btn, .form-wizard .form-wizard-submit {
+            background-color: #d65470;
+            color: #ffffff !important;
+            display: inline-block;
+            min-width: 100px;
+            min-width: 120px;
+            padding: 10px;
+            text-align: center;
+        }
+
+            .form-wizard-next-btn:hover, .form-wizard .form-wizard-next-btn:focus, .form-wizard .form-wizard-previous-btn:hover, .form-wizard .form-wizard-previous-btn:focus, .form-wizard .form-wizard-submit:hover, .form-wizard .form-wizard-submit:focus {
+                color: #ffffff;
+                opacity: 0.6;
+                text-decoration: none;
+            }
+
+        .product-photo {
+            display: inline-block;
+            width: 75px;
+            height: 75px;
+            border-radius: 30%;
+            background-size: cover;
+            background-position: center center;
+            vertical-align: middle;
+            line-height: 32px;
+            box-shadow: inset 0 0 1px #999, inset 0 0 10px rgba(0,0,0,.2);
+            margin-right: 5px;
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+
+        .grdproduct-name {
+            display: inline-block;
+            vertical-align: middle;
+            padding-left: 3px;
+        }
+
+        .accordion {
+            margin-left: 0px;
+        }
+
+            .accordion li {
+                padding: 0px 0px;
+            }
+
+        small:before {
+            content: "\a ";
+            white-space: pre;
+        }
+    </style>
+}
+<form method="post" data-ajax="true" data-ajax-method="post" data-ajax-loading="#preloader" data-ajax-success="saveorder">
+    <div class="container py-md-4">
+        <div class="row">
+            <div class="col-lg-8 col-md-8">
+                <ul class="accordion">
+                    <li>
+                        <a class="aaccordion addressheader card-header bg-dark text-light ml-0 row container">Address Details</a>
+                        <div class="addresscontent content">
+                            <div class="row">
+                                @Html.HiddenFor(model => model.addressDetails.AddressID)
+                                @Html.HiddenFor(model => model.addressDetails.UserID)
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="@Model.addressDetails.ContactName"></label>
+                                        <input asp-for="@Model.addressDetails.ContactName" class="form-control" />
+                                        <span asp-validation-for="@Model.addressDetails.ContactName" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="@Model.addressDetails.Mobile"></label>
+                                        <input asp-for="@Model.addressDetails.Mobile" class="form-control" />
+                                        <span asp-validation-for="@Model.addressDetails.Mobile" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label asp-for="@Model.addressDetails.AddressLine1"></label>
+                                <input asp-for="@Model.addressDetails.AddressLine1" class="form-control" />
+                                <span asp-validation-for="@Model.addressDetails.AddressLine1" class="text-danger"></span>
+                            </div>
+
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="@Model.addressDetails.City"></label>
+                                        <input asp-for="@Model.addressDetails.City" class="form-control" />
+                                        <span asp-validation-for="@Model.addressDetails.City" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="@Model.addressDetails.State"></label>
+                                        <input asp-for="@Model.addressDetails.State" class="form-control" />
+                                        <span asp-validation-for="@Model.addressDetails.State" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="@Model.addressDetails.PinCode"></label>
+                                        <input asp-for="@Model.addressDetails.PinCode" class="form-control" />
+                                        <span asp-validation-for="@Model.addressDetails.PinCode" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="@Model.addressDetails.Lankmark"></label>
+                                        <input asp-for="@Model.addressDetails.Lankmark" class="form-control" />
+                                        <span asp-validation-for="@Model.addressDetails.Lankmark" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-2 offset-sm-3 col-md-3 offset-md-9" style="padding-bottom:12px;">
+                                <button type="submit" class="btn btn-success form-control movetosummery ">
+                                    <span>Next</span>
+                                </button>
+                            </div>
+
+                        </div>
+                    </li>
+                    <li>
+                        <a class="aaccordion cartheader card-header bg-dark text-light ml-0 row container">Summery</a>
+                        <div class="cartcontent content" tabindex='1'>
+                            <div class="shopping-cart">
+
+                                <div class="column-labels">
+                                    <label class="product-image">Image</label>
+                                    <label class="product-details">Product</label>
+                                    <label class="product-price">Price</label>
+                                    <label class="product-quantity">Quantity</label>
+                                    <label class="product-removal">Remove</label>
+                                    <label class="product-line-price">Total</label>
+                                </div>
+                                @if (Model.ProductList.Count() > 0)
+                                {
+                                @foreach (Product product in Model.ProductList)
+                                    {
+                                <div class="product">
+                                    <div class="product-image">
+                                        <img src="../images/product/@product.ImagePath">
+                                    </div>
+                                    <div class="product-details">
+                                        <div class="product-title">@product.ProductName</div>
+                                        <p class="product-description">@product.ShortDesc</p>
+                                    </div>
+                                    <div class="product-price">@((product.SellingPrice).ToString("0.00"))</div>
+                                    <div class="product-quantity">
+                                        <input type="number" value="@product.TempQty" min="1" max="@product.Quantity" onchange="Calc(this)"
+                                               data-productid="@product.ProductID">
+                                    </div>
+                                    <div class="product-removal">
+                                        <button type="button" class="remove-product" data-productid="@product.ProductID">
+                                            Remove
+                                        </button>
+                                    </div>
+                                    <div id="TotalPrice_@product.ProductID" class="product-line-price">@((product.SellingPrice * product.TempQty).ToString("0.00"))</div>
+                                </div>}
+                                }
+
+
+                                <div class="totals d-block d-sm-none">
+                                    <div class="totals-item">
+                                        <label>Subtotal</label>
+                                        <div class="totals-value" id="cart-subtotal">@((ViewBag.SubTotal).ToString("0.00"))</div>
+                                    </div>
+                                    <div class="totals-item">
+                                        <label>Tax (@ViewBag.TaxRate %)</label>
+                                        <div class="totals-value" id="cart-tax">@((ViewBag.TaxAmount).ToString("0.00"))</div>
+                                    </div>
+                                    <div class="totals-item">
+                                        <label>Shipping</label>
+                                        <div class="totals-value" id="cart-shipping">@((ViewBag.DeliveryCharges).ToString("0.00"))</div>
+                                    </div>
+                                    <div class="totals-item totals-item-total">
+                                        <label>Grand Total</label>
+                                        <div class="totals-value" id="cart-total">@((ViewBag.TotalPayable).ToString("0.00"))</div>
+                                    </div>
+                                </div>
+
+                                @if (Model.ProductList.Count() > 0)
+                                {
+                                <div class="row">
+                                    <div class="offset-md-7 col col-sm-2 col-md-2">
+                                        <button type="submit" class="btn btn-success form-control checkout">
+                                            <span>Continue</span>
+                                        </button>
+                                    </div>
+                                    <div class="col col-sm-2 col-md-3">
+                                        <button type="button" href="@Url.Action("Products","Home")" class="btn btn-success form-control">
+                                            Shop Now
+                                        </button>
+                                    </div>
+                                </div>
+                                }
+
+                            </div>
+                        </div>
+                    </li>
+
+                </ul>
+            </div>
+
+
+
+            <div class="col-lg-4 col-md-4 d-none d-lg-block">
+                <div class="card">
+                    <div class="card-header bg-dark text-light ml-0 row container">
+                        <div class="col-md-6">
+                            Price Details
+                        </div>
+                    </div>
+                    <div class="card-body" style="text-align:center;">
+                        <div class="row" style="padding-bottom:10px;">
+                            <div class="col" style="text-align:left;">
+                                Subtotal
+                            </div>
+                            <div class="col" style="text-align:right;">
+                                <div class="totals-value" id="cart-subtotal">@((ViewBag.SubTotal).ToString("0.00"))</div>
+                            </div>
+                        </div>
+                        <div class="row" style="padding-bottom:10px;">
+                            <div class="col" style="text-align:left;">
+                                Tax (@ViewBag.TaxRate %)
+                            </div>
+                            <div class="col" style="text-align:right;">
+                                <div class="totals-value" id="cart-tax">@((ViewBag.TaxAmount).ToString("0.00"))</div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col" style="text-align:left;">
+                                Shipping
+                            </div>
+                            <div class="col" style="text-align:right;">
+                                <div class="totals-value" id="cart-shipping">@((ViewBag.DeliveryCharges).ToString("0.00"))</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <div class="row">
+                            <div class="col" style="text-align:left;">
+                                Grand Total
+                            </div>
+                            <div class="col" style="text-align:right;">
+                                <div class="totals-value" id="cart-total">@((ViewBag.TotalPayable).ToString("0.00"))</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+@section Scripts{
+    <script src="~/js/Cart.js?v=3"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-ajax-unobtrusive/3.2.6/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
+
+    <script type="text/javascript">
+        $(".licart").addClass('active');
+        $(".floatingButtonWrap").hide();
+        var taxRate = @ViewBag.TaxRate;
+        var shippingRate = @ViewBag.DeliveryCharges;
+        var fadeTime = 300;
+        var UpdateCartURI = "@Url.Action("UpdateCart", "Cart")";
+        var RemoveCartItemURI = "@Url.Action("Remove", "Cart")";
+
+        
+
+
+        saveorder = function (response) {
+            var options = MakePayment(response);
+            var rzp1 = new Razorpay(options);
+            rzp1.on('payment.failed', function (response) {
+                Swal.fire({
+                    title: 'Payment while processing payment.',
+                    text: 'Please try again.',
+                    icon: 'error',
+                });
+            });
+            rzp1.open();
+        };
+
+        function PaymentSuccess(response) {
+            $.post('@Url.Action("CapturePaymet", "Cart")', { response }, function (data) {
+                Swal.fire({
+                    title: 'Payment processed successfully.',
+                    text: 'Thank you.',
+                    icon: 'success',
+                    confirmButtonColor: '#0069d9',
+                }).then((result) => {
+                    window.location.href = "@Url.Action("InquiryConfirmation", "Cart")";
+                });
+             });
+        }
+
+    </script>
+
+}

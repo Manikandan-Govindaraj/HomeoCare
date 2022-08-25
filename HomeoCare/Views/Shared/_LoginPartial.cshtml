@@ -1,0 +1,40 @@
+﻿@using Microsoft.AspNetCore.Identity
+
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+
+@if (SignInManager.IsSignedIn(User))
+{
+    @*<li class="nav-item">
+            <a id="manage" class="nav-link" asp-controller="Account" asp-action="Profile" title="Manage">Hello @UserManager.GetUserAsync(User).Result.DisplayName</a>
+        </li>*@
+
+    @if (User.IsInRole(WC.AdminRole))
+    {
+        <li class="has-children liAdmin">
+            <a href="#" class="nav-link">Content Management</a>
+            <ul class="dropdown arrow-top">
+                <li><a asp-controller="Category" asp-action="Index" class="nav-link">Category</a></li>
+                <li><a asp-controller="Product" asp-action="Index" class="nav-link">Product</a></li>
+                <li><a asp-controller="Order" asp-action="Index" class="nav-link">Orders</a></li>
+            </ul>
+        </li>
+    }
+    else { 
+        <li class="has-children liAccount">
+            <a href="#" class="nav-link">Hello @UserManager.GetUserAsync(User).Result.DisplayName</a>
+            <ul class="dropdown arrow-top">
+                <li><a asp-controller="Account" asp-action="Profile" class="nav-link">Profile</a></li>
+                <li><a asp-controller="Account" asp-action="ManageAddress" class="nav-link">Manage Address</a></li>
+                <li><a asp-controller="Account" asp-action="Orders" class="nav-link">Orders</a></li>
+            </ul>
+        </li>
+    }  
+    <li><a asp-action="Logout" asp-controller="Auth" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })" class="nav-link">Logout</a></li>
+}
+else
+{
+    <li class="liRegister"><a asp-action="Register" asp-controller="Auth" class="nav-link">Register</a></li>
+    <li class="liLogin"><a asp-action="Login" asp-controller="Auth" class="nav-link">Login</a></li>
+}

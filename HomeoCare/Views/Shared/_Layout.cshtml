@@ -1,0 +1,180 @@
+﻿@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+@inject HomeoCare.Data.ApplicationDbContext applicationDbContext
+
+@using HomeoCare.Utility
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="stylesheet" href="~/fontawesome/css/all.css" />
+    <link href="https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <title>Kovai Cart - Online Shopping</title>
+
+
+    <!-- Additional CSS Files -->
+    <link rel="stylesheet" href="~/templates/css/fontawesome.css">
+    <link rel="stylesheet" href="~/templates/css/templatemo-sixteen.css">
+    <link rel="stylesheet" href="~/css/site.css?v=1.0">
+    <link rel="stylesheet" href="~/css/Nav.css?v=1.0" />
+
+    @await RenderSectionAsync("Styles", required: false)
+    <style type="text/css">
+        #successmsg {
+            position: absolute;
+            top: 115px;
+            right: 600px;
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ***** Preloader Start ***** -->
+    <div id="preloader">
+        <div class="jumper">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+    <!-- ***** Preloader End ***** -->
+    <!-- .site-mobile-menu -->
+    <div class="site-mobile-menu site-navbar-target">
+        <div class="site-mobile-menu-header">
+            <div class="site-mobile-menu-close">
+                <i class="fas fa-times js-menu-toggle"></i>
+            </div>
+        </div>
+        <div class="site-mobile-menu-body"></div>
+    </div> <!-- .site-mobile-menu -->
+    <!-- Header -->
+    <div class="site-navbar-wrap">
+        <div class="site-navbar-top" style="display:none;">
+            <div class="container py-3">
+                <div class="row align-items-center">
+                    <div class="col-6">
+                        <div class="d-flex mr-auto">
+                            <a href="tel:9097797791" class="d-flex align-items-center mr-4">
+                                <span class="mr-2"><i class="fas fa-phone"></i></span>
+                                <span class="d-none d-md-inline-block">+91 90 977 977 91</span>
+                            </a>
+                            <a href="mailto:info@kovaicart.com" class="d-flex align-items-center mr-auto">
+                                <span class="mr-2"><i class="fas fa-envelope"></i></span>
+                                <span class="d-none d-md-inline-block">info@kovaicart.com</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-6 text-right">
+                        <div class="mr-auto">
+                            <a href="http://wa.me/+919097797791" target="_blank" class="p-2 pl-0"><i class="fab fa-whatsapp"></i></a>
+                            <a href="#" class="p-2 pl-0"><i class="fab fa-twitter"></i></a>
+                            <a href="#" class="p-2 pl-0"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#" class="p-2 pl-0"><i class="fab fa-linkedin-in"></i></a>
+                            <a href="#" class="p-2 pl-0"><i class="fab fa-instagram"></i></a>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="site-navbar site-navbar-target js-sticky-header" style="background-color:#252839 !important;">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-8 col-md-2">
+                        <h1 class="my-0 site-logo navbar-brand"><a asp-action="Index" asp-controller="Home"><h2>Kovai <em> Cart</em></h2></a></h1>
+                    </div>
+                    <div class="col-4 col-md-10">
+                        <nav class="site-navigation text-right" role="navigation">
+                            <div class="container">
+                                <div class="d-inline-block d-lg-none ml-md-0 mr-auto py-3"><a href="#" class="site-menu-toggle js-menu-toggle text-white"><i class="fas fa-bars"></i></a></div>
+
+                                <ul class="site-menu main-menu js-clone-nav d-none d-lg-block">
+                                    <li class="liHome"><a asp-action="Index" asp-controller="Home" class="nav-link">Home</a></li>
+                                    @*<li class="liProducts"><a asp-action="Products" asp-controller="Home" class="nav-link">Products</a></li>*@
+                                    <li class="has-children liProducts">
+                                        <a asp-action="Products" asp-controller="Home" class="nav-link">Shop</a>
+                                        <ul class="dropdown arrow-top showloader">
+                                            <li><a data-CatID="0" asp-action="Products" asp-controller="Home" class="nav-link">All Products</a></li>
+                                            @foreach (var obj in applicationDbContext.Category)
+                                            {
+                                                <li><a data-CatID="@obj.Id" href="@Url.Action("Products","Home",new { CatID = obj.Id })" class="nav-link">@obj.Name</a></li>
+                                            }
+                                        </ul>
+                                    </li>
+                                    <partial name="_LoginPartial" />
+
+                                    @*<li><a href="#about-section" class="nav-link">About</a></li>
+                                        <li><a href="#events-section" class="nav-link">Events</a></li>
+                                        <li><a href="#gallery-section" class="nav-link">Gallery</a></li>
+                                        <li><a href="#contact-section" class="nav-link">Contact</a></li>*@
+                                </ul>
+                            </div>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--</header>-->
+    <!-- Page Content -->
+    <div class="products page-heading">
+        @RenderBody()
+        <div class="floatingButtonWrap">
+            <div class="floatingButtonInner">
+                @{
+                    var count = HttpContextAccessor.HttpContext.Session.GetString(WC.CartItemCount) ?? "0";
+                    <span class="cartitemcount icon-button__badge">@count</span>
+                }
+
+                <a asp-action="Index" asp-controller="Cart" class="floatingButton">
+                    <i class="fas fa-shopping-cart"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="inner-content" style="padding:20px;margin-top:10px;">
+                        <p>
+                            Copyright &copy; 2021 Kovai Cart.
+                            @*- Design: <a rel="nofollow noopener" href="https://reckonspace.com" target="_blank">Reckon Space</a>*@
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Additional Scripts -->
+    <script src="~/templates/js/custom.js?v=1.0"></script>
+    <script src="~/js/site.js?v=1.0"></script>
+    <script src="~/js/jquery.sticky.js"></script>
+    <script src="~/js/Nav.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#preloader").hide();
+            $('.showloader').click(function () {
+                $("#preloader").show();
+            });
+        });
+    </script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

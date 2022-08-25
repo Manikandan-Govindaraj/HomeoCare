@@ -1,0 +1,150 @@
+﻿/*CUSTOM CSS*/
+/**************************************/
+.btn-group-sm > .btn, .btn-sm {
+    padding: 6px;
+}
+
+/*.submenu {
+    padding-bottom: 10px !important;
+    padding-top: 3px;
+    border-bottom: 1px solid #f33f3f !important;
+    text-align: center;
+}
+*/
+.products {
+    margin-top: 0px;
+    padding: 80px 0px 0px 0px;
+    text-align: left;
+}
+
+.product-name {
+    height: 50px;
+}
+
+/**************************************/
+
+.bottom-right {
+    position: absolute;
+    bottom: 8px;
+    right: 30px;
+}
+.top-right {
+    position: absolute;
+    right: 30px;
+}
+
+.spanpricing {
+    display: inline-block;
+    width: 100px;
+    height: 35px;
+    margin: 6px;
+    background-color: #343a40;
+    padding-top: 7px;
+    border-radius: 25px;
+}
+
+.floatingButtonWrap {
+    display: block;
+    position: fixed;
+    bottom: 45px;
+    right: 45px;
+    z-index: 999999999;
+}
+
+.floatingButtonInner {
+    position: relative;
+}
+
+.floatingButton {
+    display: block;
+    width: 60px;
+    height: 60px;
+    text-align: center;
+    background: -webkit-linear-gradient(45deg, #8769a9, #507cb3);
+    background: -o-linear-gradient(45deg, #8769a9, #507cb3);
+    background: linear-gradient(45deg, #8769a9, #507cb3);
+    color: #fff;
+    line-height: 50px;
+    position: absolute;
+    border-radius: 50% 50%;
+    bottom: 0px;
+    right: 0px;
+    border: 5px solid #b2bedc;
+    /* opacity: 0.3; */
+    opacity: 1;
+    transition: all 0.4s;
+}
+
+    .floatingButton .fa {
+        font-size: 15px !important;
+    }
+
+    .floatingButton.open,
+    .floatingButton:hover,
+    .floatingButton:focus,
+    .floatingButton:active {
+        opacity: 1;
+        color: #fff;
+    }
+
+
+    .floatingButton .fa {
+        transform: rotate(0deg);
+        transition: all 0.4s;
+    }
+
+    .floatingButton.open .fa {
+        transform: rotate(270deg);
+    }
+
+.floatingMenu {
+    position: absolute;
+    bottom: 60px;
+    right: 0px;
+    /* width: 200px; */
+    display: none;
+}
+
+
+
+.icon-button__badge {
+    position: absolute;
+    top: -75px;
+    right: -10px;
+    width: 25px;
+    height: 25px;
+    background: #f33f3f;
+    color: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+}
+
+/**************************************/
+
+.background-header .navbar-brand h2 {
+    color: #121212 !important;
+}
+
+.site-navbar .navbar-brand {
+    float: left;
+    margin-top: -12px;
+    outline: none;
+}
+
+    .site-navbar .navbar-brand h2 {
+        color: #fff;
+        text-transform: uppercase;
+        font-size: 24px;
+        font-weight: 700;
+        -webkit-transition: all .3s ease 0s;
+        -moz-transition: all .3s ease 0s;
+        -o-transition: all .3s ease 0s;
+        transition: all .3s ease 0s;
+    }
+
+        .site-navbar .navbar-brand h2 em {
+            font-style: normal;
+            color: #f33f3f;
+        }

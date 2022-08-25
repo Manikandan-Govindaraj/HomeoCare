@@ -1,0 +1,157 @@
+﻿kendo.ui.Grid.fn.editCell = (function (editCell) {
+    return function (cell) {
+        cell = $(cell);
+
+        var that = this,
+            column = that.columns[that.cellIndex(cell)],
+            model = that._modelForContainer(cell),
+            event = {
+                container: cell,
+                model: model,
+                preventDefault: function () {
+                    this.isDefaultPrevented = true;
+                }
+            };
+
+        if (model && typeof this.options.beforeEdit === "function") {
+            this.options.beforeEdit.call(this, event);
+
+            // don't edit if prevented in beforeEdit
+            if (event.isDefaultPrevented) return;
+        }
+
+        editCell.call(this, cell);
+    };
+})(kendo.ui.Grid.fn.editCell);
+
+var products = [{
+    ProductID: 1,
+    ProductName: "Chai",
+    SupplierID: 1,
+    CategoryID: 1,
+    QuantityPerUnit: "10 boxes x 20 bags",
+    UnitPrice: 18.0000,
+    UnitsInStock: 39,
+    UnitsOnOrder: 0,
+    ReorderLevel: 10,
+    Discontinued: false,
+    Category: {
+        CategoryID: 1,
+        CategoryName: "Beverages",
+        Description: "Soft drinks, coffees, teas, beers, and ales"
+    }
+}, {
+    ProductID: 2,
+    ProductName: "Chang",
+    SupplierID: 1,
+    CategoryID: 1,
+    QuantityPerUnit: "24 - 12 oz bottles",
+    UnitPrice: 19.0000,
+    UnitsInStock: 17,
+    UnitsOnOrder: 40,
+    ReorderLevel: 25,
+    Discontinued: false,
+    Category: {
+        CategoryID: 1,
+        CategoryName: "Beverages",
+        Description: "Soft drinks, coffees, teas, beers, and ales"
+    }
+}, {
+    ProductID: 3,
+    ProductName: "Aniseed Syrup",
+    SupplierID: 1,
+    CategoryID: 2,
+    QuantityPerUnit: "12 - 550 ml bottles",
+    UnitPrice: 10.0000,
+    UnitsInStock: 13,
+    UnitsOnOrder: 70,
+    ReorderLevel: 25,
+    Discontinued: false,
+    Category: {
+        CategoryID: 2,
+        CategoryName: "Condiments",
+        Description: "Sweet and savory sauces, relishes, spreads, and seasonings"
+    }
+}];
+
+var dataSource = new kendo.data.DataSource({
+    pageSize: 20,
+    data: products,
+    autoSync: true,
+    schema: {
+        model: {
+            id: "ProductID",
+            fields: {
+                ProductID: {
+                    editable: false,
+                    nullable: true
+                },
+                ProductName: {
+                    validation: {
+                        required: true
+                    }
+                },
+                Category: {
+                    defaultValue: {
+                        CategoryID: 1,
+                        CategoryName: "Beverages"
+                    }
+                },
+                UnitPrice: {
+                    type: "number",
+                    validation: {
+                        required: true,
+                        min: 1
+                    }
+                }
+            }
+        }
+    }
+});
+
+$("#grid").kendoGrid({
+    dataSource: dataSource,
+    pageable: true,
+    height: 430,
+    toolbar: ["create"],
+    columns: [{
+        field: "ProductName",
+        title: "Product Name"
+    }, {
+        field: "Category",
+        title: "Category",
+        width: "160px",
+        editor: categoryDropDownEditor,
+        template: "#=Category.CategoryName#"
+    }, {
+        field: "UnitPrice",
+        title: "Unit Price",
+        format: "{0:c}",
+        width: "120px"
+    }, {
+        command: "destroy",
+        title: " ",
+        width: "90px"
+    }],
+    editable: true,
+    beforeEdit: function(e) {
+        var columnIndex = this.cellIndex(e.container);
+        var fieldName = this.thead.find("th").eq(columnIndex).data("field");
+
+        if (!isEditable(fieldName, e.model)) {
+            e.preventDefault();
+        }
+    }
+});
+
+/**
+ * @returns {boolean} True if the column with the given field name is editable
+ */
+function isEditable(fieldName, model) {
+    if (fieldName === "ProductName") {
+        // condition for the field "ProductName"
+        return model.hasOwnProperty("ProductName") && model.ProductName !== "Chai";
+    }
+
+    return true; // default to editable
+}

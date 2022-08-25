@@ -1,0 +1,24 @@
+﻿@model ErrorViewModel
+@{ ViewData["Title"] = "Error"; }
+
+<div class="text-center" style="padding-top:20px;">
+
+    @if (Model.IsException)
+    {
+<h3>an error occured while processing your requst</h3><br />
+    <h3>the support team is notified and we are working on the fix.</h3> }
+else
+{
+
+<h2 class="text-danger">@ViewBag.ErrorMsg</h2>}
+
+
+    @if (Model.ShowRequestId)
+    {
+<p>
+    <strong>Request ID:</strong> <code>@Model.RequestId</code>
+</p>}
+
+</div>
+
+

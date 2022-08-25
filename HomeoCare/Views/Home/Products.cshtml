@@ -1,0 +1,224 @@
+﻿@model HomeoCare.Models.ViewModels.HomeVM
+
+@section Styles{
+    <link href="//cdn.jsdelivr.net/npm/@@sweetalert2/theme-bootstrap-4/bootstrap-4.css" rel="stylesheet">
+    <style>
+        .products {
+            padding: 20px 0px 0px 0px;
+        }
+
+        .prodimgbottom {
+            display: inline-block;
+            width: 100%;
+            height: 35px;
+            /*margin: 6px;*/
+            background-color: #343a40;
+            padding-top: 5px;
+            color: #ffc107 !important;
+            padding-left: 12px;
+            text-align: center;
+        }
+
+        .btn {
+            border: 1.5px solid #ddd;
+            border-radius: 25px;
+        }
+
+        .switch-field {
+            display: flex;
+            /*margin-bottom: 36px;*/
+            overflow: hidden;
+            margin: auto;
+            padding-bottom: 10px;
+        }
+
+            .switch-field input {
+                position: absolute !important;
+                clip: rect(0, 0, 0, 0);
+                height: 1px;
+                width: 1px;
+                border: 0;
+                overflow: hidden;
+            }
+
+            .switch-field label {
+                /*background-color: #e4e4e4;*/
+                color: rgba(0, 0, 0, 0.6);
+                font-size: 14px;
+                line-height: 1;
+                text-align: center;
+                padding: 8px 16px;
+                margin-right: -1px;
+                border: 1px solid rgba(0, 0, 0, 0.2);
+                box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px rgba(255, 255, 255, 0.1);
+                transition: all 0.1s ease-in-out;
+            }
+
+                .switch-field label:hover {
+                    cursor: pointer;
+                }
+
+            .switch-field input:checked + label {
+                background-color: #a5dc86;
+                box-shadow: none;
+            }
+
+            .switch-field label:first-of-type {
+                border-radius: 4px 0 0 4px;
+            }
+
+            .switch-field label:last-of-type {
+                border-radius: 0 4px 4px 0;
+            }
+    </style>
+}
+
+<form method="post">
+    <div class="best-features">
+        <div class="container py-md-4">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="filters">
+                        <ul>
+                            <li class="showloader filter-button">
+                                <a data-CatID="0" href="@Url.Action("Products","Home",new { CatID = 0 })">All Products</a>
+                            </li>
+                            @foreach (var obj in Model.Categories)
+                            {
+                                <li class="showloader filter-button">
+                                    <a data-CatID="@obj.Id" href="@Url.Action("Products","Home",new { CatID = obj.Id })">@obj.Name</a>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+                <div class="header-text"></div>
+                @foreach (var prod in Model.Products)
+                {
+                    <div class="col-sm-4 filter @prod.Category.Name.Replace(' ','_')">
+                        <div class="product-item">
+                            <div class="top-right">
+                                <span class="spanpricing"><h4 class="text-warning text-center">@((prod.SellingPrice.FormatCurrency())) </h4></span>
+                            </div>
+                            <a asp-action="Details" asp-route-id="@prod.ProductID">
+                                <img src="@WC.ImagePath@prod.ImagePath" alt="">
+                            </a>
+                            <span class="prodimgbottom"> @prod.ProductName</span>
+                            <div class="down-content">
+                                @*<div class="row">
+                                        <div class="col-md-9 col-9 product-name">
+                                            <h4> @prod.ProductName</h4>
+                                        </div>
+                                    </div>*@
+                                @*<p style="padding-top:10px;">@prod.ShortDesc</p>*@
+                                <div class="row">
+                                    <div class="switch-field">
+                                        <input type="radio" id="radio-three-@prod.ProductID" name="switch-@prod.ProductID" value="yes" checked />
+                                        <label for="radio-three-@prod.ProductID">250 gms</label>
+                                        <input type="radio" id="radio-four-@prod.ProductID" name="switch-@prod.ProductID" value="maybe" />
+                                        <label for="radio-four-@prod.ProductID">500 gms</label>
+                                        <input type="radio" id="radio-five-@prod.ProductID" name="switch-@prod.ProductID" value="no" />
+                                        <label for="radio-five-@prod.ProductID">1 Kg</label>
+                                    </div>
+                                </div>
+                                <div class="row">
+
+                                    <div class="col-md-6 col-6">
+                                        <button type="button" data-productname="@prod.ProductName" data-ProductID="@prod.ProductID" class="btn btn-info form-control btn-sm">
+                                            <i class="fas fa-shopping-cart"></i>&nbsp;Add to Cart
+                                        </button>
+                                    </div>
+                                    <div class="col-md-6 col-6">
+                                        <a asp-action="Details" asp-route-id="@prod.ProductID" class="btn btn-info form-control btn-sm">
+                                            <i class="far fa-eye"></i>&nbsp;Read More
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+                @if (Convert.ToInt32(TempData["pageNumber"]) > 0)
+                {
+                    <div class="col-md-12">
+                        <ul class="pages">
+                            <li><a href="@Url.Action("Products", "Home", new { PageNo = Convert.ToInt32(TempData["pageNumber"])-1 })"><i class="fa fa-angle-double-left"></i></a></li>
+                            @for (int i = 1; i <= Convert.ToInt32(TempData["TotalPages"]); i++)
+                            {
+                                @if (Convert.ToInt32(TempData["pageNumber"]) == i)
+                                {
+                                    <li class="active"><a href="@Url.Action("Products", "Home", new { PageNo = i })">@i</a></li>
+                                }
+                                else
+                                {
+                                    <li><a href="@Url.Action("Products", "Home", new { PageNo = i })">@i</a></li>
+                                }
+                            }
+                            <li><a href="@Url.Action("Products", "Home", new { PageNo = Convert.ToInt32(TempData["pageNumber"])+1 })"><i class="fa fa-angle-double-right"></i></a></li>
+                        </ul>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+</form>
+
+
+
+@section Scripts{
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
+    <script>
+        $(document).ready(function () {
+
+            if ("@ViewBag.isEmailConfirmed" != "") {
+                Swal.fire({
+                    title: 'Email confirmed successfully.',
+                    text: 'continue shopping with us.',
+                    icon: 'success',
+                    confirmButtonColor: '#0069d9',
+                });
+            }
+
+            $('[data-productid]').click(function () {
+                var button = $(this);
+                $.post("@Url.Action("Addtocart","Home")", { ProductID: button.data("productid") }, function (data) {
+                    $(".cartitemcount").html(data.cartitemcount);
+
+                    Swal.fire({
+                        title: 'hooray!',
+                        text: button.data("productname") + " has been added to your cart",
+                        icon: 'success',
+                        focusConfirm: false,
+                        showCancelButton: true,
+                        confirmButtonColor: '#0069d9',
+                        cancelButtonColor: '#28a745',
+                        confirmButtonText: 'View cart',
+                        cancelButtonText: 'Continue shopping'
+
+                    }).then((result) => {
+                        if (result.value) {
+                            window.location.href = '@Url.Action("Index","Cart")';
+                        }
+                    });
+                });
+            });
+            $("ul").find('[data-catid="@TempData["CatID"]"]').css("color", "#f33f3f");
+            $(".liProducts").addClass('active');
+            //$(".filter-button").click(function () {
+            //    var value = $(this).attr('data-filter');
+            //    $(".filters > ul > li").removeClass("active");
+            //    $(this).addClass("active");
+            //    if (value == "all") {
+            //        $('.filter').show('1000');
+            //    }
+            //    else {
+            //        $(".filter").not('.' + value).hide('3000');
+            //        $('.filter').filter('.' + value).show('3000');
+
+            //    }
+            //});
+
+        });
+    </script>
+}
