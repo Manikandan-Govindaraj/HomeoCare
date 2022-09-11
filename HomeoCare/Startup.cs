@@ -90,7 +90,7 @@ namespace HomeoCare
             }
 
 
-            var defaultDateCulture = "en-IN";
+            var defaultDateCulture = "en-GB";
             var ci = new CultureInfo(defaultDateCulture);
             ci.NumberFormat.NumberDecimalSeparator = ".";
             ci.NumberFormat.CurrencyDecimalSeparator = ".";

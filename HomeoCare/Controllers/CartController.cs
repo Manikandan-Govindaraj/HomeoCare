@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http; 
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using HomeoCare.Data;
 using HomeoCare.Models;
@@ -231,7 +231,6 @@ namespace HomeoCare.Controllers
             }
             catch (Exception ex)
             {
-
                 throw;
             }
         }
@@ -271,13 +270,13 @@ namespace HomeoCare.Controllers
             return Json(new { cartitemcount = shoppingCartList.Count() });
         }
         [AllowAnonymous]
-        public JsonResult UpdateCart(int ProductID, int Quantity)
+        public async Task<JsonResult> UpdateCart(int ProductID, int Quantity)
         {
             List<ShoppingCart> shoppingCartList = HttpContext.Request.Cookies.GetShoppingCart<List<ShoppingCart>>();
             shoppingCartList.FirstOrDefault(u => u.ProductId == ProductID).Quantity = Quantity;
             ShoppingCart shoppingCart = shoppingCartList.FirstOrDefault(u => u.ProductId == ProductID);
             _db.ShoppingCart.Update(shoppingCart);
-            _db.SaveChanges();
+            await _db.SaveChangesAsync();
             Response.Cookies.Set(WC.CartCookie, shoppingCartList, null);
             return Json(new { status = true });
         }
