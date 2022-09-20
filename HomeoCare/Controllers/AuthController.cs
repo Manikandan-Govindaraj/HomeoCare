@@ -86,29 +86,33 @@ namespace HomeoCare.Controllers
                     else
                         await _userManager.AddToRoleAsync(user, WC.CustomerRole);
 
-
-                    //generate confirmation code
-                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                    code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-                    ViewBag.ConfirmationLink =
-                        Url.Action(
-                        "ConfirmEMail", "Auth",
-                        new { userId = user.Id, code = code, returnUrl = Url.Action("Products", "Home") },
-                        Request.Scheme);
-
-                    //create html for email
-                    var html = await this.RenderViewToStringAsync("~/Views/Shared/EmailTemplates/EmailConfirmation.cshtml");
-
-                    //send email
-                    await _emailSender.SendEmailAsync(registerModel.Email, "Confirm your email", html);
-
-                    if (_userManager.Options.SignIn.RequireConfirmedAccount)
-                    {
-                        return RedirectToAction("RegisterSuccess", "Auth");
-                        //return RedirectToPage("RegisterConfirmation", new { userId = user.Id, returnUrl = Url.Action("Products", "Home") });
-                    }
-
+                    await _signInManager.SignInAsync(user, isPersistent: false);
+                    TempData["isEmailConfirmed"] = true;
+                    TempData.Keep();
                     return RedirectToAction("Products", "Home");
+
+                    ////generate confirmation code
+                    //var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                    //code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+                    //ViewBag.ConfirmationLink =
+                    //    Url.Action(
+                    //    "ConfirmEMail", "Auth",
+                    //    new { userId = user.Id, code = code, returnUrl = Url.Action("Products", "Home") },
+                    //    Request.Scheme);
+
+                    ////create html for email
+                    //var html = await this.RenderViewToStringAsync("~/Views/Shared/EmailTemplates/EmailConfirmation.cshtml");
+
+                    ////send email
+                    //await _emailSender.SendEmailAsync(registerModel.Email, "Confirm your email", html);
+
+                    //if (_userManager.Options.SignIn.RequireConfirmedAccount)
+                    //{
+                    //    return RedirectToAction("RegisterSuccess", "Auth");
+                    //    //return RedirectToPage("RegisterConfirmation", new { userId = user.Id, returnUrl = Url.Action("Products", "Home") });
+                    //}
+
+                    //return RedirectToAction("Products", "Home");
                 }
             }
             return View();

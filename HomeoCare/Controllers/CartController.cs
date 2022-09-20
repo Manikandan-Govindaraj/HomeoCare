@@ -313,8 +313,8 @@ namespace HomeoCare.Controllers
 
             PersonalDetails personalDetails = _db.PersonalDetails.FirstOrDefault(u => u.UserID == UserID);
 
-            await _emailSender.SendEmailAsync(personalDetails.Email,
-                "Your HomeoRightCare.com order #" + ViewBag.OrderID + " of " + shoppingCartList.Count() + " items.", html);
+            //await _emailSender.SendEmailAsync(personalDetails.Email,
+            //    "Your HomeoRightCare.com order #" + ViewBag.OrderID + " of " + shoppingCartList.Count() + " items.", html);
         }
 
 

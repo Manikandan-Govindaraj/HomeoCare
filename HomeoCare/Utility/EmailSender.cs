@@ -29,19 +29,27 @@ namespace HomeoCare.Utility
 
         // Use our configuration to send the email by using SmtpClient
         public Task SendEmailAsync(string email, string subject, string htmlMessage)
-        {        
-            _mailSettings = _configuration.GetSection("EmailSender").Get<MailSettings>();
-
-            var client = new SmtpClient(_mailSettings.host, _mailSettings.port)
+        {
+            try
             {
-                UseDefaultCredentials = false,
-                Credentials = new NetworkCredential(_mailSettings.userName, _mailSettings.password),
-                EnableSsl = _mailSettings.enableSSL
-                
-            };
-            return client.SendMailAsync(
-                new MailMessage(_mailSettings.userName, email, subject, htmlMessage) { IsBodyHtml = true }
-            );
+                _mailSettings = _configuration.GetSection("EmailSender").Get<MailSettings>();
+
+                var client = new SmtpClient(_mailSettings.host, _mailSettings.port)
+                {
+                    UseDefaultCredentials = false,
+                    Credentials = new NetworkCredential(_mailSettings.userName, _mailSettings.password),
+                    EnableSsl = _mailSettings.enableSSL
+
+                };
+                return client.SendMailAsync(
+                    new MailMessage(_mailSettings.userName, email, subject, htmlMessage) { IsBodyHtml = true }
+                );
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
         }
     }
 }

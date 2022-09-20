@@ -40,9 +40,7 @@ namespace HomeoCare.Models
         [Column(TypeName = "VARCHAR(20)"), Required, MaxLength(20)]
         public string State { get; set; }
 
-        [Column(TypeName = "VARCHAR(10)"), Required]
-        [StringLength(6, ErrorMessage = "The {0} must {1} characters long.", MinimumLength = 6)]
-        [RegularExpression(@"^(\d{6})$", ErrorMessage = "Please enter valid pin code.")]
+        [Column(TypeName = "VARCHAR(10)"), Required] 
         public string PinCode { get; set; }
 
         [Column(TypeName = "VARCHAR(50)"), MaxLength(50)]

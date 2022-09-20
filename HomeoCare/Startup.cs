@@ -45,8 +45,8 @@ namespace HomeoCare
             services.Configure<IdentityOptions>(opts =>
             {
                 opts.Password.RequiredLength = 8;
-                opts.SignIn.RequireConfirmedEmail = true;
-                opts.SignIn.RequireConfirmedAccount = true;
+                opts.SignIn.RequireConfirmedEmail = false;
+                opts.SignIn.RequireConfirmedAccount = false;
             });
 
             services.ConfigureApplicationCookie(options => options.LoginPath = "/Auth/Login");
@@ -77,17 +77,18 @@ namespace HomeoCare
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-            else
-            {
-                app.UseExceptionHandler("/Home/Error");
-                app.UseStatusCodePagesWithReExecute("/Home/Error/{0}");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
-            }
+            app.UseDeveloperExceptionPage();
+            //if (env.IsDevelopment())
+            //{
+            //    app.UseDeveloperExceptionPage();
+            //}
+            //else
+            //{
+            //    app.UseExceptionHandler("/Home/Error");
+            //    app.UseStatusCodePagesWithReExecute("/Home/Error/{0}");
+            //    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+            //    app.UseHsts();
+            //}
 
 
             var defaultDateCulture = "en-GB";
