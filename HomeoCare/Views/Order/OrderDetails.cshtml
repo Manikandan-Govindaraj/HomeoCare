@@ -34,9 +34,9 @@
                         <span>@orderprod.Quantity</span>
                     </div>
                     <div class="product-removal">
-                        <button type="button" class="remove-product" data-productid="@orderprod.ProductID">
+                        @*<button type="button" class="remove-product" data-productid="@orderprod.ProductID">
                             Return
-                        </button>
+                        </button>*@
                     </div>
                     <div id="TotalPrice_@orderprod.ProductID" class="product-line-price">@((orderprod.Price * orderprod.Quantity).ToString("0.00"))</div>
                 </div>}
